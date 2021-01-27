@@ -30,9 +30,9 @@ for (var i = 0; i < 3; i++)
     randF = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
     randT = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
     //Конец Переменных для Рандом
-    createcircle(Math.floor(Math.random() * 600), Math.floor(Math.random() * 200),colors[randC],radius_mass[random]);
-    createfilledRect(Math.floor(Math.random() * 600), Math.floor(Math.random() * 200),colors[randF],razmer_k[randomK]);
-    createrectangle(Math.floor(Math.random() * 600), Math.floor(Math.random() * 200),colors[randT],razmer_T[randomFTP]);
+    createcircle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randC],radius_mass[random]);
+    createfilledRect(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randF],razmer_k[randomK]);
+    createrectangle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randT],razmer_T[randomFTP]);
 }
 
 function createcircle(x, y, z, f)
@@ -58,7 +58,7 @@ function createcircle(x, y, z, f)
     circle.position.y = y;
     if ((circle.x < f || circle.x > (renderer.screen.width + f))
         || circle.y < f || circle.y > (renderer.screen.height + f)) {
-        circle.position.set(Math.floor(Math.random() * 550), Math.floor(Math.random() * 200));
+        circle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
     }
     stage.addChild(circle);
 }
@@ -85,7 +85,7 @@ function createfilledRect(x, y, z, f)
     filledRect.position.y = y;
     if ((filledRect.x < f || filledRect.x > (renderer.screen.width + f))
         || filledRect.y < f || filledRect.y > (renderer.screen.height + f)) {
-        filledRect.position.set(Math.floor(Math.random() * 550), Math.floor(Math.random() * 200));
+        filledRect.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
     }
     stage.addChild(filledRect);
 }
@@ -112,7 +112,7 @@ function createrectangle(x, y, z, f,)
     rectangle.position.y = y;
     if ((rectangle.x < 110 || rectangle.x > (renderer.screen.width + 110))
         || rectangle.y < 110 || rectangle.y > (renderer.screen.height + 110)) {
-        rectangle.position.set(Math.floor(Math.random() * 550), Math.floor(Math.random() * 200));
+        rectangle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
     }
     stage.addChild(rectangle);
 }
