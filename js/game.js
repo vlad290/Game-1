@@ -12,6 +12,12 @@ var radius_mass = [10,20,30,40,50,60]; //массив радиуса
 var razmer_k = [10,20,30,40,50,60,70,80,90,100]; //массив Ширины
 var razmer_T = [[-40, 0, 0, -100, 40, 0],[-40, 0, 0, 100, 40, 0],[100, 0, 0, 40, 0, -40],[-100, 0, 0, 40, 0, -40]]
 var colors = [0xFFFF0B, 0xFF700B, 0x4286f4, 0x4286f4, 0xf441e8, 0x8dff6d, 0x41ccc9, 0xe03375, 0x95e032, 0x77c687, 0x43ba5b, 0x0ea3ba]; //массив цветов
+//Звуковые файлы
+var good = new Audio();
+var error = new Audio();
+good.src = "sound/chime.mp3";
+error.src = "sound/boing.mp3";
+//Конец Звуковых файлов
 //Конец Массивов для рандома
 
 for (var i = 0; i < 3; i++)
@@ -166,11 +172,13 @@ function onDragEnd()
         ((this.Itrectangle) && ((this.position.x > rectangle2.x - 80 && this.position.x < rectangle2.x + 80) && (this.position.y > rectangle2.y - 80 && this.position.y < rectangle2.y + 80))))
     {
         this.clear();
+        good.play();
     }
     else
     {
         this.position.x = this.dragObjStart.x;
         this.position.y = this.dragObjStart.y;
+        error.play();
     }
 }
 function onDragMove()
