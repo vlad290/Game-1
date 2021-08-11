@@ -4,52 +4,50 @@ var renderer = PIXI.autoDetectRenderer(width, height, { antialias: true });
 document.body.appendChild(renderer.view);
 var stage = new PIXI.Container();
 stage.interactive = true;
-var circlemass = []; //массив хранящий наши Круги
-var filledRectmass = []; //массив хранящий наши Кводраты
-var rectanglemass = []; //массив хранящий наши Треуголдьнкик
+var CircleMass = []; //массив хранящий наши Круги
+var FilledRectMass = []; //массив хранящий наши Кводраты
+var RectangleMass = []; //массив хранящий наши Треуголдьнкик
 //Массивы для рондома
-var radius_mass = [10,20,30,40,50,60]; //массив радиуса
-var razmer_k = [10,20,30,40,50,60,70,80,90,100]; //массив Ширины
-var razmer_T = [[-40, 0, 0, -100, 40, 0],[-40, 0, 0, 100, 40, 0],[100, 0, 0, 40, 0, -40],[-100, 0, 0, 40, 0, -40]]
-var colors = [0xFFFF0B, 0xFF700B, 0x4286f4, 0x4286f4, 0xf441e8, 0x8dff6d, 0x41ccc9, 0xe03375, 0x95e032, 0x77c687, 0x43ba5b, 0x0ea3ba]; //массив цветов
+var RadiusMass = [10,20,30,40,50,60]; //массив радиуса
+var RazmerK = [10,20,30,40,50,60,70,80,90,100]; //массив Ширины
+var RazmerT = [[-40, 0, 0, -100, 40, 0],[-40, 0, 0, 100, 40, 0],[100, 0, 0, 40, 0, -40],[-100, 0, 0, 40, 0, -40]]
+var Colors = [0xFFFF0B, 0xFF700B, 0x4286f4, 0x4286f4, 0xf441e8, 0x8dff6d, 0x41ccc9, 0xe03375, 0x95e032, 0x77c687, 0x43ba5b, 0x0ea3ba]; //массив цветов
 //Звуковые файлы
-var good = new Audio();
-var error = new Audio();
-good.src = "sound/chime.mp3";
-error.src = "sound/boing.mp3";
+var Good = new Audio();
+var Error = new Audio();
+Good.src = "sound/chime.mp3";
+Error.src = "sound/boing.mp3";
 //Конец Звуковых файлов
 //Конец Массивов для рандома
-class createCircle
+class Circle
 {
-	constructor(x, y, colors, razmer)
+	constructor(x, y, colors, size)
 	{
 		this.x = x;
 		this.y = y;
 		this.colors = colors;
-		this.razmer = razmer;	
-		var circle = new PIXI.Graphics();
-		circle.interactive = true;
-		circle.buttonMode = true;
-		circle.lineStyle(2,colors);
-		circle.beginFill();
-		circle.drawCircle(0, 0, razmer);
-		circle
-			.on('pointerdown', onDragStart)
-			.on('mouseup', onDragEnd)
-			.on('mouseupoutside', onDragEnd)
-			.on('touchend', onDragEnd)
-			.on('touchendoutside', onDragEnd)
-			.on('pointermove', onDragMove);
-		circle.Itcircle = true; //указываем что это наш шарик
-		circlemass.push(circle); //обратиться на прямую к объекту circle мы не можем, поэтому отправляем его в массив
-		circle.position.x = x;
-		circle.position.y = y;
-		if ((circle.x < razmer || circle.x > (renderer.screen.width + razmer))
-			|| circle.y < razmer || circle.y > (renderer.screen.height + razmer)) {
-			circle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
+		this.size = size;	
+		var Circle = new PIXI.Graphics();
+		Circle.interactive = true;
+		Circle.buttonMode = true;
+		Circle.lineStyle(2,colors);
+		Circle.beginFill();
+		Circle.drawCircle(0, 0, size);
+		Circle
+			.on('pointerdown', OnDragStart)
+			.on('pointerup', OnDragEnd)
+			.on('pointerupoutside', OnDragEnd)
+			.on('pointermove', OnDragMove);
+		Circle.Itcircle = true; //указываем что это наш шарик
+		CircleMass.push(Circle); //обратиться на прямую к объекту Circle мы не можем, поэтому отправляем его в массив
+		Circle.position.x = x;
+		Circle.position.y = y;
+		if ((Circle.x < size || Circle.x > (renderer.screen.width + size))
+			|| Circle.y < size || Circle.y > (renderer.screen.height + size)) {
+			Circle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
 		}
-		stage.addChild(circle);
-		function onDragEnd()
+		stage.addChild(Circle);
+		function OnDragEnd()
 		{
 			this.alpha = 1;
 			this.dragging = false;
@@ -57,48 +55,46 @@ class createCircle
 			if ((this.Itcircle) && ((this.position.x > circle2.x - 80 && this.position.x < circle2.x + 80) && (this.position.y > filledRect2.y - 80 && this.position.y < filledRect2.y + 80)))
 			{
 				this.clear();
-				good.play();
+				Good.play();
 			}
 			else
 			{
 				this.position.x = this.dragObjStart.x;
 				this.position.y = this.dragObjStart.y;
-				error.play();
+				Error.play();
 			}
 		}
 	}
 }
-class createFilledRect
+class FilledRect
 {
-	constructor(x, y, colors, razmer)
+	constructor(x, y, colors, size)
 	{
 		this.x = x;
 		this.y = y;
 		this.colors = colors;
-		this.razmer = razmer;	
-		var filledRect = new PIXI.Graphics();
-		filledRect.interactive = true;
-		filledRect.buttonMode = true;
-		filledRect.lineStyle(2,colors);
-		filledRect.beginFill()
-		filledRect.drawRect(razmer/-2, razmer/-2, razmer, razmer)
-		filledRect
-			.on('pointerdown', onDragStart)
-			.on('mouseup', onDragEnd)
-			.on('mouseupoutside', onDragEnd)
-			.on('touchend', onDragEnd)
-			.on('touchendoutside', onDragEnd)
-			.on('pointermove', onDragMove);
-		filledRect.ItfilledRect = true; //указываем что это наш Квадрат
-		filledRectmass.push(filledRect); //обратиться на прямую к объекту circle мы не можем, поэтому отправляем его в массив
-		filledRect.position.x = x;
-		filledRect.position.y = y;
-		if ((filledRect.x < razmer || filledRect.x > (renderer.screen.width + razmer))
-			|| filledRect.y < razmer || filledRect.y > (renderer.screen.height + razmer)) {
-			filledRect.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
+		this.size = size;	
+		var FilledRect = new PIXI.Graphics();
+		FilledRect.interactive = true;
+		FilledRect.buttonMode = true;
+		FilledRect.lineStyle(2,colors);
+		FilledRect.beginFill()
+		FilledRect.drawRect(size/-2, size/-2, size, size)
+		FilledRect
+			.on('pointerdown', OnDragStart)
+			.on('pointerup', OnDragEnd)
+			.on('pointerupoutside', OnDragEnd)
+			.on('pointermove', OnDragMove);
+		FilledRect.ItfilledRect = true; //указываем что это наш Квадрат
+		FilledRectMass.push(FilledRect); //обратиться на прямую к объекту circle мы не можем, поэтому отправляем его в массив
+		FilledRect.position.x = x;
+		FilledRect.position.y = y;
+		if ((FilledRect.x < size || FilledRect.x > (renderer.screen.width + size))
+			|| FilledRect.y < size || FilledRect.y > (renderer.screen.height + size)) {
+			FilledRect.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
 		}
-		stage.addChild(filledRect);
-		function onDragEnd()
+		stage.addChild(FilledRect);
+		function OnDragEnd()
 		{
 			this.alpha = 1;
 			this.dragging = false;
@@ -106,48 +102,46 @@ class createFilledRect
 			if ((this.ItfilledRect) && ((this.position.x > filledRect2.x - 80 && this.position.x < filledRect2.x + 80) && (this.position.y > filledRect2.y - 80 && this.position.y < filledRect2.y + 80)))
 			{
 				this.clear();
-				good.play();
+				Good.play();
 			}
 			else
 			{
 				this.position.x = this.dragObjStart.x;
 				this.position.y = this.dragObjStart.y;
-				error.play();
+				Error.play();
 			}
 		}
 	}
 }
-class createRectangle
+class Rectangle
 {
-	constructor(x, y, colors, razmer)
+	constructor(x, y, colors, size)
 	{
 		this.x = x;
 		this.y = y;
 		this.colors = colors;
-		this.razmer = razmer;	
-		var rectangle = new PIXI.Graphics();
-		rectangle.interactive = true;
-		rectangle.buttonMode = true;
-		rectangle.lineStyle(2,colors);
-		rectangle.beginFill(); // Color it black
-		rectangle.drawPolygon(razmer);
-		rectangle
-			.on('pointerdown', onDragStart)
-			.on('mouseup', onDragEnd)
-			.on('mouseupoutside', onDragEnd)
-			.on('touchend', onDragEnd)
-			.on('touchendoutside', onDragEnd)
-			.on('pointermove', onDragMove);
-		rectangle.Itrectangle = true; //указываем что наш Триугольник
-		rectanglemass.push(rectangle); //обратиться на прямую к объекту circle мы не можем, поэтому отправляем его в массив
-		rectangle.position.x = x;
-		rectangle.position.y = y;
-		if ((rectangle.x < 110 || rectangle.x > (renderer.screen.width + 110))
-			|| rectangle.y < 110 || rectangle.y > (renderer.screen.height + 110)) {
-			rectangle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
+		this.size = size;	
+		var Rectangle = new PIXI.Graphics();
+		Rectangle.interactive = true;
+		Rectangle.buttonMode = true;
+		Rectangle.lineStyle(2,colors);
+		Rectangle.beginFill(); // Color it black
+		Rectangle.drawPolygon(size);
+		Rectangle
+			.on('pointerdown', OnDragStart)
+			.on('pointerup', OnDragEnd)
+			.on('pointerupoutside', OnDragEnd)
+			.on('pointermove', OnDragMove);
+		Rectangle.Itrectangle = true; //указываем что наш Триугольник
+		RectangleMass.push(Rectangle); //обратиться на прямую к объекту circle мы не можем, поэтому отправляем его в массив
+		Rectangle.position.x = x;
+		Rectangle.position.y = y;
+		if ((Rectangle.x < 110 || Rectangle.x > (renderer.screen.width + 110))
+			|| Rectangle.y < 110 || Rectangle.y > (renderer.screen.height + 110)) {
+			Rectangle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
 		}
-		stage.addChild(rectangle);
-		function onDragEnd()
+		stage.addChild(Rectangle);
+		function OnDragEnd()
 		{
 			this.alpha = 1;
 			this.dragging = false;
@@ -155,13 +149,13 @@ class createRectangle
 			if ((this.Itrectangle) && ((this.position.x > rectangle2.x - 80 && this.position.x < rectangle2.x + 80) && (this.position.y > rectangle2.y - 80 && this.position.y < rectangle2.y + 80)))
 			{
 				this.clear();
-				good.play();
+				Good.play();
 			}
 			else
 			{
 				this.position.x = this.dragObjStart.x;
 				this.position.y = this.dragObjStart.y;
-				error.play();
+				Error.play();
 			}
 		}
 	}
@@ -170,17 +164,16 @@ class createRectangle
 for (var i = 0; i < 3; i++)
 {
     //Переменные для Рандом
-    random = Math.floor(Math.random() * radius_mass.length); //генерим рандомное число радиусов Круга
-    randomFTP = Math.floor(Math.random() * razmer_T.length); //генерим рандомное число Кводрата
-    randomK = Math.floor(Math.random() * razmer_k.length); //генерим рандомное число Кводрата
-    randC = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
-    randF = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
-    randT = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
+    Random = Math.floor(Math.random() * RadiusMass.length); //генерим рандомное число радиусов Круга
+    RandomFTP = Math.floor(Math.random() * RazmerT.length); //генерим рандомное число Кводрата
+    RandomK = Math.floor(Math.random() * RazmerK.length); //генерим рандомное число Кводрата
+    RandC = Math.floor(Math.random() * Colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
+    RandF = Math.floor(Math.random() * Colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
+    RandT = Math.floor(Math.random() * Colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
     //Конец Переменных для Рандом
-	//new Circles(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randC],radius_mass[random]);
-	new createCircle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randC],radius_mass[random]);
-    new createFilledRect(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randF],razmer_k[randomK]);
-    new createRectangle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randT],razmer_T[randomFTP]);
+	new Circle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),Colors[RandC],RadiusMass[Random]);
+    new FilledRect(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),Colors[RandF],RazmerK[RandomK]);
+    new Rectangle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),Colors[RandT],RazmerT[RandomFTP]);
 }
 //Отрисовка линии ифигур для перетаскивания
 //Линия раздела
@@ -220,7 +213,7 @@ function animate()
     requestAnimationFrame(animate);
     renderer.render(stage);
 }
-function onDragStart(event)
+function OnDragStart(event)
 {
     this.data = event.data;
     this.alpha = 0.5;
@@ -228,7 +221,7 @@ function onDragStart(event)
     this.dragObjStart = new PIXI.Point();
     this.dragObjStart.copyFrom(this.position);
 }
-function onDragMove()
+function OnDragMove()
 {
     if (this.dragging)
     {
