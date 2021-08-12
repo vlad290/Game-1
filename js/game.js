@@ -1,6 +1,7 @@
 var width = 800; //получаем ширину экрана
 var height = 600; // получаем высоту экрана
-var renderer = PIXI.autoDetectRenderer(width, height, { antialias: true });
+//var renderer = PIXI.autoDetectRenderer(width, height, { antialias: true });
+const renderer = new PIXI.Application(width, height, { antialias: false });
 document.body.appendChild(renderer.view);
 var stage = new PIXI.Container();
 stage.interactive = true;
@@ -9,8 +10,8 @@ var filledRectMass = []; //массив хранящий наши Кводрат
 var rectangleMass = []; //массив хранящий наши Треуголдьнкик
 //Массивы для рондома
 var radiusMass = [10,20,30,40,50,60]; //массив радиуса
-var razmerK = [10,20,30,40,50,60,70,80,90,100]; //массив Ширины
-var razmerT = [[-40, 0, 0, -100, 40, 0],[-40, 0, 0, 100, 40, 0],[100, 0, 0, 40, 0, -40],[-100, 0, 0, 40, 0, -40]]
+var sizeK = [10,20,30,40,50,60,70,80,90,100]; //массив Ширины
+var sizeT = [[-40, 0, 0, -100, 40, 0],[-40, 0, 0, 100, 40, 0],[100, 0, 0, 40, 0, -40],[-100, 0, 0, 40, 0, -40]]
 var colors = [0xFFFF0B, 0xFF700B, 0x4286f4, 0x4286f4, 0xf441e8, 0x8dff6d, 0x41ccc9, 0xe03375, 0x95e032, 0x77c687, 0x43ba5b, 0x0ea3ba]; //массив цветов
 //Звуковые файлы
 var good = new Audio();
@@ -38,7 +39,6 @@ class Circle
 			.on('pointerup', OnDragEnd)
 			.on('pointerupoutside', OnDragEnd)
 			.on('pointermove', OnDragMove);
-		circle.Itcircle = true; //указываем что это наш шарик
 		circleMass.push(circle); //обратиться на прямую к объекту Circle мы не можем, поэтому отправляем его в массив
 		circle.position.x = x;
 		circle.position.y = y;
@@ -46,13 +46,13 @@ class Circle
 			|| circle.y < size || circle.y > (renderer.screen.height + size)) {
 			circle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
 		}
-		stage.addChild(circle);
+		renderer.stage.addChild(circle);
 		function OnDragEnd()
 		{
 			this.alpha = 1;
 			this.dragging = false;
 			this.data = null;
-			if ((this.Itcircle) && ((this.position.x > circle2.x - 80 && this.position.x < circle2.x + 80) && (this.position.y > filledRect2.y - 80 && this.position.y < filledRect2.y + 80)))
+			if ((this.position.x > circle2.x - 80 && this.position.x < circle2.x + 80) && (this.position.y > filledRect2.y - 80 && this.position.y < filledRect2.y + 80))
 			{
 				this.clear();
 				good.play();
@@ -85,7 +85,6 @@ class FilledRect
 			.on('pointerup', OnDragEnd)
 			.on('pointerupoutside', OnDragEnd)
 			.on('pointermove', OnDragMove);
-		filledRect.ItfilledRect = true; //указываем что это наш Квадрат
 		filledRectMass.push(filledRect); //обратиться на прямую к объекту FilledRect мы не можем, поэтому отправляем его в массив
 		filledRect.position.x = x;
 		filledRect.position.y = y;
@@ -93,13 +92,13 @@ class FilledRect
 			|| filledRect.y < size || filledRect.y > (renderer.screen.height + size)) {
 			filledRect.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
 		}
-		stage.addChild(filledRect);
+		renderer.stage.addChild(filledRect);
 		function OnDragEnd()
 		{
 			this.alpha = 1;
 			this.dragging = false;
 			this.data = null;
-			if ((this.ItfilledRect) && ((this.position.x > filledRect2.x - 80 && this.position.x < filledRect2.x + 80) && (this.position.y > filledRect2.y - 80 && this.position.y < filledRect2.y + 80)))
+			if ((this.position.x > filledRect2.x - 80 && this.position.x < filledRect2.x + 80) && (this.position.y > filledRect2.y - 80 && this.position.y < filledRect2.y + 80))
 			{
 				this.clear();
 				good.play();
@@ -132,7 +131,6 @@ class Rectangle
 			.on('pointerup', OnDragEnd)
 			.on('pointerupoutside', OnDragEnd)
 			.on('pointermove', OnDragMove);
-		rectangle.Itrectangle = true; //указываем что наш Триугольник
 		rectangleMass.push(rectangle); //обратиться на прямую к объекту Rectangle мы не можем, поэтому отправляем его в массив
 		rectangle.position.x = x;
 		rectangle.position.y = y;
@@ -140,13 +138,13 @@ class Rectangle
 			|| rectangle.y < 110 || rectangle.y > (renderer.screen.height + 110)) {
 			rectangle.position.set(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300));
 		}
-		stage.addChild(rectangle);
+		renderer.stage.addChild(rectangle);
 		function OnDragEnd()
 		{
 			this.alpha = 1;
 			this.dragging = false;
 			this.data = null;
-			if ((this.Itrectangle) && ((this.position.x > rectangle2.x - 80 && this.position.x < rectangle2.x + 80) && (this.position.y > rectangle2.y - 80 && this.position.y < rectangle2.y + 80)))
+			if ((this.position.x > rectangle2.x - 80 && this.position.x < rectangle2.x + 80) && (this.position.y > rectangle2.y - 80 && this.position.y < rectangle2.y + 80))
 			{
 				this.clear();
 				good.play();
@@ -165,15 +163,15 @@ for (var i = 0; i < 3; i++)
 {
     //Переменные для Рандом
     random = Math.floor(Math.random() * radiusMass.length); //генерим рандомное число радиусов Круга
-    randomFTP = Math.floor(Math.random() * razmerT.length); //генерим рандомное число Кводрата
-    randomK = Math.floor(Math.random() * razmerK.length); //генерим рандомное число Кводрата
+    randomFTP = Math.floor(Math.random() * sizeT.length); //генерим рандомное число Кводрата
+    randomK = Math.floor(Math.random() * sizeK.length); //генерим рандомное число Кводрата
     randC = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
     randF = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
     randT = Math.floor(Math.random() * colors.length); //генерим рандомное число(в промежутке от 0 до количества цветов в массиве цветов)
     //Конец Переменных для Рандом
 	new Circle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randC],radiusMass[random]);
-    new FilledRect(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randF],razmerK[randomK]);
-    new Rectangle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randT],razmerT[randomFTP]);
+    new FilledRect(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randF],sizeK[randomK]);
+    new Rectangle(Math.floor(Math.random() * 700), Math.floor(Math.random() * 300),colors[randT],sizeT[randomFTP]);
 }
 //Отрисовка линии ифигур для перетаскивания
 //Линия раздела
@@ -181,7 +179,7 @@ var graphics = new PIXI.Graphics();
 graphics.lineStyle(5, 0x33FF00);
 graphics.moveTo(0,400);
 graphics.lineTo(width, 400);
-stage.addChild(graphics);
+renderer.stage.addChild(graphics);
 //Круг 2
 var circle2 = new PIXI.Graphics();
 circle2.lineStyle(1,0xFFFFFF);
@@ -189,7 +187,7 @@ circle2.beginFill();
 circle2.drawCircle(0, 0, 80);
 circle2.x  = 166;
 circle2.y  = 500;
-stage.addChild(circle2);
+renderer.stage.addChild(circle2);
 //Квадрат 2
 const filledRect2 = new PIXI.Graphics()
 filledRect2.lineStyle(1,0xFFFFFF);
@@ -197,7 +195,7 @@ filledRect2.beginFill()
 filledRect2.drawRect(-80, -80, 160, 160)
 filledRect2.x  = 412;
 filledRect2.y  = 500;
-stage.addChild(filledRect2)
+renderer.stage.addChild(filledRect2)
 //Триугольник 2
 const rectangle2 = new PIXI.Graphics();
 rectangle2.lineStyle(1,0xFFFFFF);
@@ -205,14 +203,8 @@ rectangle2.beginFill(); // Color it black
 rectangle2.drawPolygon(-80, 0, 0, -160, 80, 0);
 rectangle2.x  = 658;
 rectangle2.y  = 580;
-stage.addChild(rectangle2);
+renderer.stage.addChild(rectangle2);
 //Конец Отрисовки линии и фигурок
-requestAnimationFrame( animate );
-function animate()
-{
-    requestAnimationFrame(animate);
-    renderer.render(stage);
-}
 function OnDragStart(event)
 {
     this.data = event.data;
